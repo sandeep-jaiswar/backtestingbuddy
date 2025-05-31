@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import Button, { ButtonProps } from './Button';
+import Button from './Button'; // Assuming ButtonProps is also exported from ./Button
 import React from 'react'; // Import React for JSX
 
 const meta: Meta<typeof Button> = {
@@ -10,8 +10,8 @@ const meta: Meta<typeof Button> = {
     backgrounds: {
       default: 'light',
       values: [
-        { name: 'light', value: 'var(--ui-background-primary)' }, // Use CSS var for light bg
-        { name: 'dark', value: 'var(--ui-background-primary)' },  // Use CSS var for dark bg (it will be different in dark mode)
+        { name: 'light', value: 'var(--ui-background-primary)' },
+        { name: 'dark', value: 'var(--ui-background-primary)' },
       ],
     },
   },
@@ -23,12 +23,7 @@ const meta: Meta<typeof Button> = {
       description: 'The visual style of the button.',
       table: { defaultValue: { summary: 'filled' } },
     },
-    intent: {
-      control: 'select',
-      options: ['primary', 'destructive', 'none'],
-      description: 'The purpose or emphasis of the button.',
-      table: { defaultValue: { summary: 'primary' } },
-    },
+    // intent argType removed
     size: {
       control: 'select',
       options: ['small', 'medium', 'large'],
@@ -49,8 +44,8 @@ const meta: Meta<typeof Button> = {
   },
   args: { // Default args for all stories
     children: 'Button Text',
-    variant: 'filled',
-    intent: 'primary',
+    variant: 'filled', // Default variant
+    // intent arg removed
     size: 'medium',
     disabled: false,
   },
@@ -59,148 +54,85 @@ const meta: Meta<typeof Button> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// Base story to showcase controls
-export const Default: Story = {};
+// Base story to showcase controls via ArgsTable
+export const Default: Story = {
+  args: {
+    children: 'Default (Filled)',
+  }
+};
 
-// Filled Variants
-export const FilledPrimary: Story = {
+// Stories for each variant
+export const Filled: Story = {
   args: {
     variant: 'filled',
-    intent: 'primary',
-    children: 'Filled Primary',
+    children: 'Filled Button',
   },
 };
 
-export const FilledDestructive: Story = {
-  args: {
-    variant: 'filled',
-    intent: 'destructive',
-    children: 'Filled Destructive',
-  },
-};
-
-export const FilledNone: Story = {
-  args: {
-    variant: 'filled',
-    intent: 'none',
-    children: 'Filled None',
-  },
-};
-
-// Tinted Variants
-export const TintedPrimary: Story = {
+export const Tinted: Story = {
   args: {
     variant: 'tinted',
-    intent: 'primary',
-    children: 'Tinted Primary',
+    children: 'Tinted Button',
   },
 };
 
-export const TintedDestructive: Story = {
-  args: {
-    variant: 'tinted',
-    intent: 'destructive',
-    children: 'Tinted Destructive',
-  },
-};
-
-export const TintedNone: Story = {
-  args: {
-    variant: 'tinted',
-    intent: 'none',
-    children: 'Tinted None',
-  },
-};
-
-// Gray Variants
-export const GrayPrimaryIntent: Story = {
+export const Gray: Story = {
   args: {
     variant: 'gray',
-    intent: 'primary', // Will render with blue text due to component logic
-    children: 'Gray Primary Intent',
+    children: 'Gray Button',
   },
 };
 
-export const GrayDestructiveIntent: Story = {
-  args: {
-    variant: 'gray',
-    intent: 'destructive',
-    children: 'Gray Destructive',
-  },
-};
-
-export const GrayNoneIntent: Story = {
-  args: {
-    variant: 'gray',
-    intent: 'none',
-    children: 'Gray None Intent',
-  },
-};
-
-// Plain Variants
-export const PlainPrimaryIntent: Story = {
+export const Plain: Story = {
   args: {
     variant: 'plain',
-    intent: 'primary',
-    children: 'Plain Primary Intent',
+    children: 'Plain Button',
   },
 };
 
-export const PlainDestructiveIntent: Story = {
-  args: {
-    variant: 'plain',
-    intent: 'destructive',
-    children: 'Plain Destructive',
-  },
-};
-
-export const PlainNoneIntent: Story = {
-  args: {
-    variant: 'plain',
-    intent: 'none',
-    children: 'Plain None Intent',
-  },
-};
-
-// Sizes
-export const SmallButton: Story = {
+// Stories for sizes (using default filled variant)
+export const Small: Story = {
   args: {
     size: 'small',
     children: 'Small Button',
   },
 };
 
-export const LargeButton: Story = {
+export const Medium: Story = {
+  args: {
+    size: 'medium',
+    children: 'Medium Button',
+  },
+};
+
+export const Large: Story = {
   args: {
     size: 'large',
     children: 'Large Button',
   },
 };
 
-// Disabled State Example (using filled primary)
-export const DisabledButton: Story = {
+// Story for disabled state (using default filled variant)
+export const Disabled: Story = {
   args: {
-    variant: 'filled',
-    intent: 'primary',
     children: 'Disabled Button',
     disabled: true,
   },
 };
 
-// Example for Dark Mode (configure Storybook background addon or global decorator for .dark class)
-export const FilledPrimaryDark: Story = {
+// Story for Dark Mode (using default filled variant)
+export const FilledDark: Story = {
   args: {
     variant: 'filled',
-    intent: 'primary',
-    children: 'Filled Primary (Dark)',
+    children: 'Filled Button (Dark)',
   },
   parameters: {
     backgrounds: { default: 'dark' },
   },
   decorators: [
-    (Story) => (
-      <div className="dark"> {/* Use JSX for the decorator */}
-        <Story />
+    (StoryComponent) => (
+      <div className="dark">
+        <StoryComponent />
       </div>
     ),
   ],
