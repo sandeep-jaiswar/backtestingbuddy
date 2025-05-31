@@ -10,7 +10,7 @@
     "lint:fix": "next lint --fix",
     "prettier": "prettier --check \"**/*.{js,jsx,ts,tsx}\"",
     "prettier:fix": "prettier --write \"**/*.{js,jsx,ts,tsx}\"",
-    "analyze": "cross-env ANALYZE=true pnpm run build",
+    "analyze": "cross-env ANALYZE=true npm run build",
     "storybook": "cross-env FORCE_COLOR=1 storybook dev -p 6006",
     "test-storybook": "cross-env FORCE_COLOR=1 test-storybook",
     "build-storybook": "cross-env FORCE_COLOR=1 storybook build",
@@ -95,10 +95,5 @@
   },
   "engines": {
     "node": ">=20.0.0"
-  },
-  "overrides": {
-    "react": "$react",
-    "react-dom": "$react-dom"
-  },
-  "packageManager": "pnpm@9.1.0"
+  }
 }
