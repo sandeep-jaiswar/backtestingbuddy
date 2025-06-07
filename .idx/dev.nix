@@ -2,7 +2,6 @@
   channel = "stable-24.05";
   packages = [
     pkgs.nodejs_20
-    pkgs.pnpm_9
   ];
   idx.extensions = [
     
@@ -11,7 +10,7 @@
     previews = {
       web = {
         command = [
-          "pnpm"
+          "npm"
           "run"
           "dev"
           "--"
