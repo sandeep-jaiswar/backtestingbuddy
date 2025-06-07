@@ -1,4 +1,4 @@
-const { colors, fontFamily, fontSize, boxShadow } = require('./tokens');
+import { colors, fontFamily, fontSize, boxShadow } from "./tokens";
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
