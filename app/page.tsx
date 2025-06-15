@@ -1,5 +1,5 @@
 import { Metadata } from "next"
-import Button from "components/Button/Button"
+import Button from "@/components/button/Button"
 
 export const metadata: Metadata = {
   title: "backtestbuddy | home",
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
 export default function Web() {
   return (
     <section className="bg-system-red-light dark:bg-gray-900">
-      <div className="max-w-[var(--breakpoint-xl)] mx-auto grid px-4 py-8 text-center lg:py-16">
+      <div className="mx-auto grid max-w-[var(--breakpoint-xl)] px-4 py-8 text-center lg:py-16">
         <div className="mx-auto place-self-center">
           BacktestBuddy is a powerful tool designed to help you backtest your trading strategies with ease. Whether
           you're a seasoned trader or just starting out, BacktestBuddy provides the tools you need to analyze your

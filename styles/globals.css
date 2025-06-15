@@ -1,3 +1,125 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --system-red: #ef4444;
+  --system-orange: #f97316;
+  --system-yellow: #eab308;
+  --system-green: #22c55e;
+  --system-teal: #14b8a6;
+  --system-blue: #3b82f6;
+  --system-indigo: #6366f1;
+  --system-purple: #8b5cf6;
+  --system-pink: #ec4899;
+  --system-gray: #6b7280;
+  --gray-02: #e5e7eb;
+  --gray-03: #d1d5db;
+  --gray-04: #9ca3af;
+  --gray-05: #6b7280;
+  --gray-06: #4b5563;
+
+  --ui-background-primary: #ffffff;
+  --ui-background-secondary: #f9fafb;
+  --ui-background-tertiary: #f3f4f6;
+  --ui-background-elevated-primary: #ffffff;
+  --ui-background-elevated-secondary: #f3f4f6;
+
+  --ui-text-primary: #111827;
+  --ui-text-secondary: #374151;
+  --ui-text-tertiary: #6b7280;
+  --ui-text-quaternary: #9ca3af;
+  --ui-text-accent: #3b82f6;
+  --ui-text-destructive: #ef4444;
+  --ui-text-on-accent: #ffffff;
+  --ui-text-on-destructive: #ffffff;
+
+  --ui-border-primary: #e5e7eb;
+  --ui-border-secondary: #d1d5db;
+  --ui-border-focus: #3b82f6;
+  --default-border-color: #e5e7eb;
+
+  --ui-action-primary-bg: #3b82f6;
+  --ui-action-primary-bg-hover: #2563eb;
+  --ui-action-primary-text: #ffffff;
+  --ui-action-primary-border: #3b82f6;
+  --ui-action-primary-tint-bg: #eff6ff;
+  --ui-action-primary-tint-text: #3b82f6;
+
+  --ui-action-destructive-bg: #ef4444;
+  --ui-action-destructive-bg-hover: #dc2626;
+  --ui-action-destructive-text: #ffffff;
+  --ui-action-destructive-border: #ef4444;
+  --ui-action-destructive-tint-bg: #fef2f2;
+  --ui-action-destructive-tint-text: #ef4444;
+
+  --ui-action-neutral-bg: #e5e7eb;
+  --ui-action-neutral-bg-hover: #d1d5db;
+  --ui-action-neutral-text: #111827;
+  --ui-action-neutral-border: #e5e7eb;
+  --ui-action-neutral-tint-bg: #f3f4f6;
+  --ui-action-neutral-tint-text: #374151;
+
+  --color-fill-light: #ffffff;
+  --color-fill-light-transparent: rgba(255, 255, 255, 0.6);
+  --color-fill-dark: #0f172a;
+  --color-fill-dark-transparent: rgba(15, 23, 42, 0.6);
+}
+
+.dark {
+  --system-red: #f87171;
+  --system-orange: #fb923c;
+  --system-yellow: #facc15;
+  --system-green: #4ade80;
+  --system-teal: #2dd4bf;
+  --system-blue: #60a5fa;
+  --system-indigo: #818cf8;
+  --system-purple: #a78bfa;
+  --system-pink: #f472b6;
+  --system-gray: #d1d5db;
+  --gray-02: #374151;
+  --gray-03: #4b5563;
+  --gray-04: #6b7280;
+  --gray-05: #9ca3af;
+  --gray-06: #d1d5db;
+
+  --ui-background-primary: #0f172a;
+  --ui-background-secondary: #1e293b;
+  --ui-background-tertiary: #334155;
+  --ui-background-elevated-primary: #1e293b;
+  --ui-background-elevated-secondary: #334155;
+
+  --ui-text-primary: #f8fafc;
+  --ui-text-secondary: #e2e8f0;
+  --ui-text-tertiary: #cbd5e1;
+  --ui-text-quaternary: #94a3b8;
+  --ui-text-accent: #60a5fa;
+  --ui-text-destructive: #f87171;
+  --ui-text-on-accent: #ffffff;
+  --ui-text-on-destructive: #ffffff;
+
+  --ui-border-primary: #334155;
+  --ui-border-secondary: #475569;
+  --ui-border-focus: #60a5fa;
+
+  --ui-action-primary-bg: #60a5fa;
+  --ui-action-primary-bg-hover: #3b82f6;
+  --ui-action-primary-text: #ffffff;
+  --ui-action-primary-border: #60a5fa;
+  --ui-action-primary-tint-bg: #1e3a8a;
+  --ui-action-primary-tint-text: #60a5fa;
+
+  --ui-action-destructive-bg: #f87171;
+  --ui-action-destructive-bg-hover: #b91c1c;
+  --ui-action-destructive-text: #ffffff;
+  --ui-action-destructive-border: #f87171;
+  --ui-action-destructive-tint-bg: #7f1d1d;
+  --ui-action-destructive-tint-text: #f87171;
+
+  --ui-action-neutral-bg: #475569;
+  --ui-action-neutral-bg-hover: #64748b;
+  --ui-action-neutral-text: #f1f5f9;
+  --ui-action-neutral-border: #475569;
+  --ui-action-neutral-tint-bg: #334155;
+  --ui-action-neutral-tint-text: #cbd5e1;
+}
