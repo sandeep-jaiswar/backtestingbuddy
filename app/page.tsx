@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
   },
   openGraph: {
-    url: "https://backtestbuddy.com",
+    url: "https://jaiswarsecurities.org",
     title: "Backtestbuddy",
     images: [
       {
