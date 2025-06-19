@@ -1,5 +1,4 @@
 import { Metadata } from "next"
-import Button from "@/components/button/Button"
 
 export const metadata: Metadata = {
   title: "backtestbuddy | home",
@@ -32,7 +31,7 @@ export default function Web() {
           you're a seasoned trader or just starting out, BacktestBuddy provides the tools you need to analyze your
           strategies and make informed decisions.
         </div>
-        <Button>Hello</Button>
+        <button type="button">Hello</button>
       </div>
     </section>
   )
