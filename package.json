@@ -2,6 +2,7 @@
   "name": "backtestbuddy",
   "version": "0.0.0",
   "private": true,
+  "packageManager": "pnpm@9.0.0",
   "scripts": {
     "dev": "cross-env FORCE_COLOR=1 next dev --turbo",
     "build": "next build",
