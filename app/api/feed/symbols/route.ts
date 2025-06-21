@@ -49,7 +49,7 @@ export async function GET() {
         error instanceof Error
           ? error.message
           : typeof error === "object" && error !== null && "issues" in error
-          ? JSON.stringify((error as any).issues, null, 2)
+          ? JSON.stringify((error as unknown).issues, null, 2)
           : "Unknown error"
 
       failed.push({ symbol, error: message })

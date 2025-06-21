@@ -2,22 +2,22 @@
 
 import React, { useState } from "react"
 import {
+  Alert,
+  Badge,
   Button,
-  Input,
   Card,
-  CardHeader,
-  CardTitle,
   CardContent,
   CardFooter,
+  CardHeader,
+  CardTitle,
+  Checkbox,
+  Input,
   Modal,
-  ModalHeader,
   ModalBody,
   ModalFooter,
-  Badge,
-  Alert,
-  Spinner,
-  Checkbox,
+  ModalHeader,
   Select,
+  Spinner,
 } from "../ui"
 
 export const ComponentShowcase: React.FC = () => {

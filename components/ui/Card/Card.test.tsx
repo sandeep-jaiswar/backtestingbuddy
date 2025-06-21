@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react"
-import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "./Card"
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "./Card"
 
 describe("Card Components", () => {
   describe("Card", () => {
