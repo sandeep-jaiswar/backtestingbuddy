@@ -1,7 +1,8 @@
 import { createClient } from "@clickhouse/client"
 
 export const clickhouse = createClient({
-  url: `http://localhost:8123`,
-  username: "default",
-  password: "",
+  url: process.env.CLICKHOUSE_URL || "http://localhost:8123",
+  username: process.env.CLICKHOUSE_USERNAME || "default",
+  password: process.env.CLICKHOUSE_PASSWORD || "",
+  database: process.env.CLICKHOUSE_DATABASE || "default",
 })

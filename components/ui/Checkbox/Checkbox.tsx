@@ -1,5 +1,5 @@
-import React, { forwardRef } from "react"
 import { clsx } from "clsx"
+import React, { forwardRef } from "react"
 
 export interface CheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "type"> {
   label?: string
@@ -9,7 +9,7 @@ export interface CheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInputE
 }
 
 export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
-  ({ label, description, error, indeterminate = false, className, id, ...props }, ref) => {
+  ({ label, description, error, className, id, ...props }, ref) => {
     const checkboxId = id || `checkbox-${Math.random().toString(36).substr(2, 9)}`
 
     const baseClasses =
