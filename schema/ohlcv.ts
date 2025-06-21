@@ -3,7 +3,7 @@ import { z } from "zod"
 export const OHLCVSchema = z.object({
   symbol_id: z.string().uuid(),
 
-  ts: z.coerce.date(), // Timestamp
+  ts: z.coerce.date().nullable().optional(),
   timeframe: z.string(), // e.g., "1m", "1h", "1d"
 
   open: z.number(),
@@ -33,7 +33,7 @@ export const OHLCVSchema = z.object({
   stochastic_k: z.number(),
   stochastic_d: z.number(),
 
-  ingestion_time: z.coerce.date(), // Default now() in ClickHouse
+  ingestion_time: z.coerce.date().nullable().optional(),
 })
 
 export type OHLCV = z.infer<typeof OHLCVSchema>
