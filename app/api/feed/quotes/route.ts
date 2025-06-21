@@ -1,8 +1,8 @@
+import { ZodError } from "zod";
 import { NextResponse } from "next/server";
 import { clickhouse } from "@/lib/db";
 import { yahoo } from "@/lib/yahoo";
-import { StockQuoteSchema, StockQuote } from "@/schema/stock_quotes";
-import { ZodError } from "zod";
+import { StockQuote, StockQuoteSchema } from "@/schema/stock_quotes";
 
 const SYMBOLS_TO_FEED = ["AAPL", "GOOGL", "MSFT", "AMZN", "TSLA", "BAJFINANCE.BO"];
 
@@ -45,8 +45,10 @@ export async function GET() {
       } catch (validationError) {
           if (validationError instanceof ZodError) {
               failed.push({ symbol, error: `Validation failed: ${validationError.errors.map(e => e.message).join(', ')}` });
+          } else if (validationError instanceof Error) {
+              failed.push({ symbol, error: `Data validation error: ${validationError.message}` });
           } else {
-              failed.push({ symbol, error: `Data validation error: ${validationError}` });
+              failed.push({ symbol, error: `Unknown data validation error: ${String(validationError)}` });
           }
           continue; // Skip insertion for this symbol if validation fails
       }
@@ -62,14 +64,16 @@ export async function GET() {
           format: 'JSONEachRow',
         });
         successful.push(symbol);
-      } catch (dbError: any) {
-         failed.push({ symbol, error: `ClickHouse insertion failed: ${dbError.message}` });
+      } catch (dbError: unknown) {
+         const errorMessage = dbError instanceof Error ? dbError.message : String(dbError);
+         failed.push({ symbol, error: `ClickHouse insertion failed: ${errorMessage}` });
       }
 
-    } catch (error: any) {
+    } catch (error: unknown) {
       // Catch any other unexpected errors during the process for this symbol
+      const errorMessage = error instanceof Error ? error.message : String(error);
       console.error(`An unexpected error occurred for ${symbol}:`, error);
-      failed.push({ symbol, error: `Unexpected error: ${error.message}` });
+      failed.push({ symbol, error: `Unexpected error: ${errorMessage}` });
     }
   }
 

@@ -1,8 +1,8 @@
+import { ZodError } from "zod";
 import { NextResponse } from "next/server";
 import { clickhouse } from "@/lib/db";
 import { yahoo } from "@/lib/yahoo";
-import { StockHistoricalDataSchema, StockHistoricalData } from "@/schema/stock_historical_data";
-import { ZodError } from "zod";
+import { StockHistoricalData, StockHistoricalDataSchema } from "@/schema/stock_historical_data";
 
 const SYMBOLS_TO_FEED = ["AAPL", "GOOGL", "MSFT", "AMZN", "TSLA", "BAJFINANCE.BO"];
 
@@ -49,9 +49,10 @@ export async function GET() {
                 console.error(`Validation failed for historical data of ${symbol} on ${dayData.date}: ${validationError.errors.map(e => e.message).join(', ')}`);
                 // Decide if you want to skip this row or the whole symbol
                 // For now, we'll just log and skip the row
+            } else if (validationError instanceof Error) {
+                console.error(`Data validation error for historical data of ${symbol} on ${dayData.date}: ${validationError.message}`);
             } else {
-                console.error(`Data validation error for historical data of ${symbol} on ${dayData.date}: ${validationError}`);
-                // Log other unexpected validation errors for a specific row
+                console.error(`Unknown data validation error for historical data of ${symbol} on ${dayData.date}:`, validationError);
             }
              symbolFailed = true; // Mark symbol as failed if any row fails validation
         }
@@ -69,22 +70,23 @@ export async function GET() {
              if (!symbolFailed) { // Only add to successful if no validation errors occurred for any row
                  successful.push(symbol);
              }
-         } catch (dbError: any) {
+         } catch (dbError: unknown) {
+             const errorMessage = dbError instanceof Error ? dbError.message : String(dbError);
              console.error(`ClickHouse insertion failed for ${symbol}:`, dbError);
-             failed.push({ symbol, error: `ClickHouse insertion failed: ${dbError.message}` });
+             failed.push({ symbol, error: `ClickHouse insertion failed: ${errorMessage}` });
              symbolFailed = true; // Mark symbol as failed due to DB error
          }
       } else {
          console.warn(`No valid historical data rows to insert for ${symbol} after validation.`);
-         if (!symbolFailed) { // If no rows and no validation errors, maybe just skip, not mark as failed
-           // successful.push(symbol); // Depending on if 'no data' counts as success
+         if (!symbolFailed) {
          }
       }
 
-    } catch (error: any) {
+    } catch (error: unknown) {
       // Catch any other unexpected errors during the process for this symbol (e.g., fetching error)
+      const errorMessage = error instanceof Error ? error.message : String(error);
       console.error(`An unexpected error occurred for ${symbol}:`, error);
-      failed.push({ symbol, error: `Unexpected error during fetch or processing: ${error.message}` });
+      failed.push({ symbol, error: `Unexpected error during fetch or processing: ${errorMessage}` });
       symbolFailed = true; // Mark symbol as failed due to unexpected error
     }
 
