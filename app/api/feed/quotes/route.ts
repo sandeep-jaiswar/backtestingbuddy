@@ -1,80 +1,85 @@
-import { NextResponse } from "next/server"
-import { clickhouse } from "@/lib/db"
-import { yahoo } from "@/lib/yahoo"
-import { StockQuoteSchema, StockQuote } from "@/schema/stock_quotes"
+import { NextResponse } from "next/server";
+import { clickhouse } from "@/lib/db";
+import { yahoo } from "@/lib/yahoo";
+import { StockQuoteSchema, StockQuote } from "@/schema/stock_quotes";
+import { ZodError } from "zod";
 
-const SYMBOLS_TO_FEED = ["AAPL", "GOOGL", "MSFT", "AMZN", "TSLA", "BAJFINANCE.BO"]
+const SYMBOLS_TO_FEED = ["AAPL", "GOOGL", "MSFT", "AMZN", "TSLA", "BAJFINANCE.BO"];
 
 export async function GET() {
-  const insertedCount = 0;
-  const failed: { symbol: string; error: string }[] = []
+  const failed: { symbol: string; error: string }[] = [];
+  const successful: string[] = [];
 
   for (const symbol of SYMBOLS_TO_FEED) {
     try {
+      // 1. Fetch data from Yahoo Finance
       const quote = await yahoo.quote(symbol);
 
-      // Ensure quote and necessary fields exist
+      // Basic check if data was returned
       if (!quote || !quote.symbol) {
-        failed.push({ symbol, error: "Could not fetch quote or quote symbol is missing" });
+        failed.push({ symbol, error: "Could not fetch quote or quote data is incomplete." });
         continue;
       }
 
       const now = new Date();
 
-      const validatedQuote = StockQuoteSchema.parse({
-        symbol: quote.symbol,
-        timestamp: now, // Use current time as timestamp
-        name: quote.shortName ?? "",
-        currency: quote.currency ?? "",
-        stock_exchange: quote.fullExchangeName ?? "",
-        quote_price: Number(quote.regularMarketPrice ?? 0),
-        ask: Number(quote.ask ?? 0),
-        bid: Number(quote.bid ?? 0),
-        day_low: Number(quote.regularMarketDayLow ?? 0),
-        day_high: Number(quote.regularMarketDayHigh ?? 0),
-        year_low: Number(quote.fiftyTwoWeekLow ?? 0),
-        year_high: Number(quote.fiftyTwoWeekHigh ?? 0),
-        volume: Number(quote.regularMarketVolume ?? 0),
-        market_cap: Number(quote.marketCap ?? 0),
-      });
+      // 2. Validate data using Zod schema
+      let validatedQuote: StockQuote;
+      try {
+          validatedQuote = StockQuoteSchema.parse({
+            symbol: quote.symbol,
+            timestamp: now, // Use current time as timestamp
+            name: quote.shortName ?? "",
+            currency: quote.currency ?? "",
+            stock_exchange: quote.fullExchangeName ?? "",
+            quote_price: Number(quote.regularMarketPrice ?? 0),
+            ask: Number(quote.ask ?? 0),
+            bid: Number(quote.bid ?? 0),
+            day_low: Number(quote.regularMarketDayLow ?? 0),
+            day_high: Number(quote.regularMarketDayHigh ?? 0),
+            year_low: Number(quote.fiftyTwoWeekLow ?? 0),
+            year_high: Number(quote.fiftyTwoWeekHigh ?? 0),
+            volume: Number(quote.regularMarketVolume ?? 0),
+            market_cap: Number(quote.marketCap ?? 0),
+          });
+      } catch (validationError) {
+          if (validationError instanceof ZodError) {
+              failed.push({ symbol, error: `Validation failed: ${validationError.errors.map(e => e.message).join(', ')}` });
+          } else {
+              failed.push({ symbol, error: `Data validation error: ${validationError}` });
+          }
+          continue; // Skip insertion for this symbol if validation fails
+      }
 
-      // Prepare data for ClickHouse insert
-      const row: StockQuote = {
-        symbol: validatedQuote.symbol,
-        timestamp: validatedQuote.timestamp,
-        name: validatedQuote.name,
-        currency: validatedQuote.currency,
-        stock_exchange: validatedQuote.stock_exchange,
-        quote_price: validatedQuote.quote_price,
-        ask: validatedQuote.ask,
-        bid: validatedQuote.bid,
-        day_low: validatedQuote.day_low,
-        day_high: validatedQuote.day_high,
-        year_low: validatedQuote.year_low,
-        year_high: validatedQuote.year_high,
-        volume: validatedQuote.volume,
-        market_cap: validatedQuote.market_cap,
-      };
+      // 3. Prepare data for ClickHouse insert
+      const row: StockQuote = validatedQuote; // validatedQuote already matches the structure
 
-      await clickhouse.insert({
-        table: 'stock_quotes',
-        values: [row],
-        format: 'JSONEachRow',
-      });
-
-      // We don't track inserted count directly in this loop easily without a counter variable,
-      // but the primary goal is to process each symbol.
-      // For simplicity, we'll just report failures.
+      // 4. Insert data into ClickHouse
+      try {
+        await clickhouse.insert({
+          table: 'stock_quotes',
+          values: [row],
+          format: 'JSONEachRow',
+        });
+        successful.push(symbol);
+      } catch (dbError: any) {
+         failed.push({ symbol, error: `ClickHouse insertion failed: ${dbError.message}` });
+      }
 
     } catch (error: any) {
-      console.error(`Failed to feed quote for ${symbol}:`, error);
-      failed.push({ symbol, error: error.message });
+      // Catch any other unexpected errors during the process for this symbol
+      console.error(`An unexpected error occurred for ${symbol}:`, error);
+      failed.push({ symbol, error: `Unexpected error: ${error.message}` });
     }
   }
 
+  // 5. Return response based on results
   if (failed.length > 0) {
-    return NextResponse.json({ message: 'Failed to feed data for some symbols', failed }, { status: 500 });
+    return NextResponse.json(
+      { message: 'Data feed completed with some failures', successful, failed },
+      { status: 500 }
+    );
   } else {
-    return NextResponse.json({ message: 'Successfully initiated quote feed for all symbols' });
+    return NextResponse.json({ message: 'Successfully fed data for all symbols', successful });
   }
 }
