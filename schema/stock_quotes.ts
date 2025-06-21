@@ -2,6 +2,7 @@ import { z } from "zod"
 
 export const StockQuoteSchema = z.object({
   symbol: z.string(),
+  timestamp: z.coerce.date(),
   name: z.string(),
   currency: z.string(),
   stock_exchange: z.string(),
@@ -14,17 +15,8 @@ export const StockQuoteSchema = z.object({
   year_high: z.coerce.number(),
   volume: z.number().int(),
   market_cap: z.number().int(),
-  last_trade_time: z.coerce.date().nullable().optional(),
-  fetch_time: z.coerce.date().nullable().optional(),
 })
 
 export type StockQuote = z.infer<typeof StockQuoteSchema>
-export const StockQuoteSchemaWithId = StockQuoteSchema.extend({
-  id: z
-    .string()
-    .uuid()
-    .default(() => crypto.randomUUID()),
-  last_trade_time: z.coerce.date().default(() => new Date()),
-  fetch_time: z.coerce.date().default(() => new Date()),
-})
-export type StockQuoteWithId = z.infer<typeof StockQuoteSchemaWithId>
+// No explicit schema with ID needed for ClickHouse insert, as timestamp and symbol form the order key
+// You can use StockQuoteSchema directly for validation before inserting.
