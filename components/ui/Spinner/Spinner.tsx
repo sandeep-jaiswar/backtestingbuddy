@@ -1,51 +1,35 @@
-import React from 'react'
-import { clsx } from 'clsx'
+import React from "react"
+import { clsx } from "clsx"
 
 export interface SpinnerProps {
-  size?: 'sm' | 'md' | 'lg' | 'xl'
-  color?: 'primary' | 'secondary' | 'white'
+  size?: "sm" | "md" | "lg" | "xl"
+  color?: "primary" | "secondary" | "white"
   className?: string
 }
 
-export const Spinner: React.FC<SpinnerProps> = ({
-  size = 'md',
-  color = 'primary',
-  className
-}) => {
+export const Spinner: React.FC<SpinnerProps> = ({ size = "md", color = "primary", className }) => {
   const sizeClasses = {
-    sm: 'w-4 h-4',
-    md: 'w-6 h-6',
-    lg: 'w-8 h-8',
-    xl: 'w-12 h-12'
+    sm: "w-4 h-4",
+    md: "w-6 h-6",
+    lg: "w-8 h-8",
+    xl: "w-12 h-12",
   }
-  
+
   const colorClasses = {
-    primary: 'text-ui-action-primary-bg',
-    secondary: 'text-ui-text-tertiary',
-    white: 'text-white'
+    primary: "text-ui-action-primary-bg",
+    secondary: "text-ui-text-tertiary",
+    white: "text-white",
   }
 
   return (
     <svg
-      className={clsx(
-        'animate-spin',
-        sizeClasses[size],
-        colorClasses[color],
-        className
-      )}
+      className={clsx("animate-spin", sizeClasses[size], colorClasses[color], className)}
       fill="none"
       viewBox="0 0 24 24"
       role="status"
       aria-label="Loading"
     >
-      <circle
-        className="opacity-25"
-        cx="12"
-        cy="12"
-        r="10"
-        stroke="currentColor"
-        strokeWidth="4"
-      />
+      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
       <path
         className="opacity-75"
         fill="currentColor"
