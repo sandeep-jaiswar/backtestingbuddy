@@ -5,13 +5,13 @@ export const CorporateActionSchema = z.object({
 
   action_type: z.enum(["split", "bonus", "dividend"]), // Enum8
 
-  ex_date: z.coerce.date(), // ClickHouse Date (YYYY-MM-DD)
-  record_date: z.coerce.date(),
+  ex_date: z.string(), // ClickHouse Date (YYYY-MM-DD)
+  record_date: z.string(),
 
   ratio: z.string(), // e.g. "2:1" or "5:2"
   amount: z.number(), // For dividends
 
-  announced_at: z.coerce.date(), // DateTime
+  announced_at: z.string(), // DateTime
 })
 
 export type CorporateAction = z.infer<typeof CorporateActionSchema>

@@ -4,8 +4,8 @@ export const TradeLogSchema = z.object({
   trade_id: z.string().uuid(),
   backtest_id: z.string().uuid(),
   symbol_id: z.string().uuid(),
-  entry_time: z.coerce.date(), // In case input is string
-  exit_time: z.coerce.date(),
+  entry_time: z.string(), // In case input is string
+  exit_time: z.string(),
   entry_price: z.number(),
   exit_price: z.number(),
   quantity: z.number(),

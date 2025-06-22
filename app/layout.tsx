@@ -1,6 +1,11 @@
 import { ReactNode } from "react"
 import "styles/globals.css"
 
+export const metadata = {
+  title: "Backtesting System",
+  description: "A comprehensive backtesting system built with Next.js and ClickHouse.",
+}
+
 const RootLayout = ({ children }: { children: ReactNode }) => {
   return (
     <html lang="en">

@@ -2,13 +2,13 @@ import { z } from "zod"
 
 export const SymbolStatsDailySchema = z.object({
   symbol_id: z.string().uuid(),
-  date: z.coerce.date(), // ClickHouse `Date` (YYYY-MM-DD)
+  date: z.string(), // ClickHouse `Date` (YYYY-MM-DD)
   timeframe: z.string(), // e.g., "1d", "1w", etc.
   avg_volume: z.number(),
   volatility_14d: z.number(),
   avg_true_range: z.number(),
   trend_strength: z.number(),
-  generated_at: z.coerce.date(), // ClickHouse `DateTime`
+  generated_at: z.string(), // ClickHouse `DateTime`
 })
 
 export type SymbolStatsDaily = z.infer<typeof SymbolStatsDailySchema>
