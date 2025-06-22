@@ -1,6 +1,4 @@
-import { create } from "domain"
 import { z } from "zod"
-
 export const SymbolSchema = z.object({
   symbol_id: z.string().uuid(),
   symbol_code: z.string(),
@@ -13,8 +11,9 @@ export const SymbolSchema = z.object({
   tick_size: z.number(),
   currency: z.string(),
   active: z.boolean(),
-  created_at: z.date(),
+  created_at: z.date().default(() => new Date()),
 })
+export type SymbolType = z.infer<typeof SymbolSchema>
 
 export type SymbolEntity = z.infer<typeof SymbolSchema>
 export const SymbolSchemaWithId = SymbolSchema.extend({

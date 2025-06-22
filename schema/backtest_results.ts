@@ -6,8 +6,8 @@ export const BacktestResultSchema = z.object({
   symbol_id: z.string().uuid(),
   timeframe: z.string(),
 
-  start_date: z.coerce.date(), // ClickHouse Date
-  end_date: z.coerce.date(),
+  start_date: z.string(), // ClickHouse Date
+  end_date: z.string(),
 
   total_return: z.number(),
   annual_return: z.number(),
@@ -15,7 +15,7 @@ export const BacktestResultSchema = z.object({
   max_drawdown: z.number(),
 
   total_trades: z.number().int().nonnegative(),
-  executed_at: z.coerce.date(),
+  executed_at: z.string(),
 })
 
 export type BacktestResult = z.infer<typeof BacktestResultSchema>
