@@ -1,83 +1,82 @@
 import { render, screen } from "@testing-library/react"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "./Card"
+import React from "react"
+import { Card, CardContent, CardFooter, CardHeader, CardPadding, CardTitle, CardVariant } from "./Card"
 
-describe("Card Components", () => {
-  describe("Card", () => {
-    it("renders with default props", () => {
-      render(<Card>Card content</Card>)
-      expect(screen.getByText("Card content")).toBeInTheDocument()
-    })
-
-    it("renders different variants", () => {
-      const { rerender } = render(<Card variant="elevated">Elevated</Card>)
-      expect(screen.getByText("Elevated").parentElement).toHaveClass("shadow-lg")
-
-      rerender(<Card variant="outlined">Outlined</Card>)
-      expect(screen.getByText("Outlined").parentElement).toHaveClass("border-2")
-    })
-
-    it("renders different padding sizes", () => {
-      const { rerender } = render(<Card padding="sm">Small padding</Card>)
-      expect(screen.getByText("Small padding").parentElement).toHaveClass("p-4")
-
-      rerender(<Card padding="lg">Large padding</Card>)
-      expect(screen.getByText("Large padding").parentElement).toHaveClass("p-8")
-
-      rerender(<Card padding="none">No padding</Card>)
-      expect(screen.getByText("No padding").parentElement).not.toHaveClass("p-4", "p-6", "p-8")
-    })
+describe("Card component suite", () => {
+  // 📦 Card Component
+  it("renders children inside Card", () => {
+    render(<Card>Card content</Card>)
+    expect(screen.getByText("Card content")).toBeInTheDocument()
   })
 
-  describe("CardHeader", () => {
-    it("renders header content", () => {
-      render(<CardHeader>Header content</CardHeader>)
-      expect(screen.getByText("Header content")).toBeInTheDocument()
-    })
+  it("applies default variant and padding", () => {
+    render(<Card>Test</Card>)
+    const card = screen.getByTestId("card")
+    expect(card.className).toContain("border-ui-border-primary") // default variant
+    expect(card.className).toContain("p-6") // default padding
   })
 
-  describe("CardTitle", () => {
-    it("renders with default heading level", () => {
-      render(<CardTitle>Card Title</CardTitle>)
-      const title = screen.getByText("Card Title")
-      expect(title.tagName).toBe("H3")
-    })
-
-    it("renders with custom heading level", () => {
-      render(<CardTitle as="h1">Card Title</CardTitle>)
-      const title = screen.getByText("Card Title")
-      expect(title.tagName).toBe("H1")
-    })
+  it("applies custom class name to Card", () => {
+    render(<Card className="custom-style">Custom class</Card>)
+    const card = screen.getByTestId("card")
+    expect(card.className).toContain("custom-style")
   })
 
-  describe("CardContent", () => {
-    it("renders content", () => {
-      render(<CardContent>Card content</CardContent>)
-      expect(screen.getByText("Card content")).toBeInTheDocument()
-    })
+  // 🎨 Variant tests
+  it.each([
+    [CardVariant.DEFAULT, "border-ui-border-primary"],
+    [CardVariant.ELEVATED, "shadow-lg"],
+    [CardVariant.OUTLINED, "border-2"],
+  ])("applies %s variant class", (variant, expectedClass) => {
+    render(<Card variant={variant}>Variant test</Card>)
+    const card = screen.getByTestId("card")
+    expect(card.className).toContain(expectedClass)
   })
 
-  describe("CardFooter", () => {
-    it("renders footer content", () => {
-      render(<CardFooter>Footer content</CardFooter>)
-      expect(screen.getByText("Footer content")).toBeInTheDocument()
-    })
+  // 📏 Padding tests
+  it.each([
+    [CardPadding.NONE, ""],
+    [CardPadding.SM, "p-4"],
+    [CardPadding.MD, "p-6"],
+    [CardPadding.LG, "p-8"],
+  ])("applies %s padding class", (padding, expectedClass) => {
+    render(<Card padding={padding}>Padding test</Card>)
+    const card = screen.getByTestId("card")
+    if (expectedClass) {
+      expect(card.className).toContain(expectedClass)
+    } else {
+      expect(card.className).not.toMatch(/p-\d/)
+    }
   })
 
-  describe("Complete Card", () => {
-    it("renders all components together", () => {
-      render(
-        <Card>
-          <CardHeader>
-            <CardTitle>Test Card</CardTitle>
-          </CardHeader>
-          <CardContent>This is the card content</CardContent>
-          <CardFooter>Footer actions</CardFooter>
-        </Card>
-      )
+  // 🧩 CardHeader
+  it("renders CardHeader content", () => {
+    render(<CardHeader>Header Content</CardHeader>)
+    expect(screen.getByText("Header Content")).toBeInTheDocument()
+  })
 
-      expect(screen.getByText("Test Card")).toBeInTheDocument()
-      expect(screen.getByText("This is the card content")).toBeInTheDocument()
-      expect(screen.getByText("Footer actions")).toBeInTheDocument()
-    })
+  // 🔠 CardTitle
+  it("renders CardTitle with default heading tag", () => {
+    render(<CardTitle>Title</CardTitle>)
+    const heading = screen.getByText("Title")
+    expect(heading.tagName.toLowerCase()).toBe("h3")
+  })
+
+  it("renders CardTitle with custom heading tag", () => {
+    render(<CardTitle as="h2">Heading</CardTitle>)
+    const heading = screen.getByText("Heading")
+    expect(heading.tagName.toLowerCase()).toBe("h2")
+  })
+
+  // 📄 CardContent
+  it("renders CardContent", () => {
+    render(<CardContent>Body text</CardContent>)
+    expect(screen.getByText("Body text")).toBeInTheDocument()
+  })
+
+  // 📎 CardFooter
+  it("renders CardFooter", () => {
+    render(<CardFooter>Footer info</CardFooter>)
+    expect(screen.getByText("Footer info")).toBeInTheDocument()
   })
 })
