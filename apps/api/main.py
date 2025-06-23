@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from packages.data.fetch import fetch_stock_data
 from packages.indicators.calc import calculate_indicators
 from packages.rules.signals import generate_signal
+from apps.api.routes import backtest
 import sys
 import os
 
@@ -9,6 +10,8 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"
 
 
 app = FastAPI()
+
+app.include_router(backtest.router)
 
 @app.get("/analyze")
 def analyze_stock(symbol: str = "COALINDIA.NS"):
