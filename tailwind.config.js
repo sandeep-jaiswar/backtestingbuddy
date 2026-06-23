@@ -3,11 +3,6 @@ const config = {
   content: ["./app/**/*.{js,ts,jsx,tsx,mdx}", "./components/**/*.{js,ts,jsx,tsx,mdx}", "./styles/**/*.{css}"],
   theme: {
     extend: {
-      fontFamily: {
-        sans: ["var(--font-family-sf-pro-text)", "sans-serif"],
-        display: ["var(--font-family-sf-pro-display)", "sans-serif"],
-        mono: ["var(--font-family-sf-mono)", "monospace"],
-      },
       fontSize: {
         "4xs": "0.6875rem",
         "3xs": "0.75rem",
